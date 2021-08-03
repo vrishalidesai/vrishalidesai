@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useEffect,useRef} from "react";
 import {
   Grid,
   Paper,
@@ -15,6 +15,11 @@ import Checkbox from "@material-ui/core/Checkbox";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 const Register = () => {
+
+  const inputRef= useRef(null);
+  useEffect(()=>{
+inputRef.current.focus()
+  })
   const paperStyle = { padding: 20, width: 300, margin: "20px auto" };
   const headerStyle = { margin: 0 };
   const avtarStyle = { backgroundColor: "#4ed290" };
@@ -68,7 +73,7 @@ const Register = () => {
             <Form>
               <Field
                 as={TextField}
-                autoFocus
+                inputRef={inputRef}
                 fullWidth
                 name="name"
                 label="Name"

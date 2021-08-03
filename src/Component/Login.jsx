@@ -1,4 +1,4 @@
-import React from "react";
+import React ,{useEffect,useRef} from "react";
 import {
   Grid,
   Paper,
@@ -41,6 +41,10 @@ const onSubmit = (values, props) => {
   console.log(props);
 };
 const Login = ({ handleChange }) => {
+  const inputRef= useRef(null);
+  useEffect(()=>{
+inputRef.current.focus()
+  })
   return (
     <Grid>
       <Paper evaluation={10} style={paperStyle}>
@@ -60,7 +64,7 @@ const Login = ({ handleChange }) => {
               {console.log(props)}
               <Field
                 as={TextField}
-                autoFocus
+                inputRef={inputRef}
                 label="Username"
                 name="username"
                 placeholder="Enter username"

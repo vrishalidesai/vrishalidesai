@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useState}from 'react';
 import Home from './Component/Home';
 import Cart from './Component/Cart';
 import Login from './Component/Login';
@@ -11,50 +11,43 @@ import './App.css';
 import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
 
 
-class App extends React.Component {
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      productsInCart: [],
-      selectedId: null
-    }
-  }
-  setSelectedId = (id) => {
-    this.setState({ selectedId: id });
-  }
-  addProductToCart = (product) => {
-    this.setState({
-      productsInCart: [...this.state.productsInCart, product]
-
-    })
-  }
-  removeProductFromCart = (id) => {
+const App=(props)=> {
+  
+const [selectedId,setId]= useState(null);
+const [productsInCart,setProductsInCart]= useState([]);
     
-    let productsInCartCopy= this.state.productsInCart;
+  const setSelectedId = (id) => {
+    // this.setState({ selectedId: id });
+    setId(id);
+  }
+ const addProductToCart = (product) => {
+    setProductsInCart([...productsInCart,product])
+   
+  }
+ const removeProductFromCart = (id) => {
+    
+    let productsInCartCopy= productsInCart;
     const idx = productsInCartCopy.findIndex(({productId}) => productId === id)
     if(idx>=0){
     productsInCartCopy.splice(idx, 1)
     }
-    this.setState({
-      productsInCart: productsInCartCopy
-    })
+    setProductsInCart(productsInCartCopy)
   }
 
-  render() {
-    console.log(this.state.productsInCart);
+   
+   
     return (
       <>
         <BrowserRouter>
-          <Navbar cartCount={this.state.productsInCart.length} />
+          <Navbar cartCount={productsInCart.length} />
           <Switch>
 
-            <Route exact path="/"><Home setSelectedId={this.setSelectedId} /></Route>
+            <Route exact path="/"><Home setSelectedId={setSelectedId} /></Route>
             <Route path="/login" component={Login} />
             <Route path="/register" component={Register} />
 
-            <Route path="/artworkDetail"><ArtworkDetail selectedId={this.state.selectedId} addProductToCart={this.addProductToCart} removeProductFromCart={this.removeProductFromCart} /></Route>
-            <Route path="/cart"  ><Cart productsInCart={this.state.productsInCart} addProductToCart={this.addProductToCart} removeProductFromCart={this.removeProductFromCart} /></Route>
+            <Route path="/artworkDetail"><ArtworkDetail selectedId={selectedId} addProductToCart={addProductToCart} removeProductFromCart={removeProductFromCart} /></Route>
+            <Route path="/cart"  ><Cart productsInCart={productsInCart} addProductToCart={addProductToCart} removeProductFromCart={removeProductFromCart} /></Route>
             <Route path = "/checkout" component={Checkout}/>
 
             <Redirect to="/" />
@@ -65,7 +58,7 @@ class App extends React.Component {
 
     );
   }
-}
+
 
 export default App;
 

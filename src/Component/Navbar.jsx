@@ -3,7 +3,9 @@ import{NavLink,Link} from 'react-router-dom';
 import CartIcon from './svg/cart.svg'
 
 
-const Navbar =()=>{
+const Navbar =(props)=>{
+  const cartCount = props;
+  console.log("productsInCartlength",cartCount)
 return(
     <>
   <nav className="navbar navbar-expand-lg  bg-dark navbar-dark">
@@ -25,12 +27,14 @@ return(
       <Link to="/login">
       <button className="btn btn-outline-warning my-2 my-sm-0 px-3 " type="submit">Login / Register</button>
       </Link> 
+      
       <div className="nav-cart px-3 ">
                     <span>0</span>
                     <Link to="/cart">
                         <img src={CartIcon} alt="" width="20"></img>
                     </Link>
-                </div>
+                </div>     
+                
                  </div>
   </nav>
     </>

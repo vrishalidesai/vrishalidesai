@@ -1,29 +1,24 @@
-import React from "react";
+import React,{useState,useEffect} from "react";
 import Data, { getData } from "../data";
 import Card from "./Card";
 
-class Home extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      photos: [],
-      productsInCart: [],
-    };
-  }
-  componentDidMount() {
+const Home =(props)=> {
+  const [photos,setPhotos]= useState([]);
+  const [productsInCart,setProductsInCart]=useState([])
+ 
+  useEffect(()=>{
     getData().then((result) => {
-      this.setState({ photos: result });
+      setPhotos(result );
     });
-  }
+    return()=>{
+      setPhotos([] );
+    }
+  },[])
 
-  componentWillUnmount() {
-    this.setState({ photos: [] });
-  }
-
-  render() {
-    console.log(this.state.photos);
-    return !this.state.photos.length ? (
+  
+ 
+    console.log(photos);
+    return !photos.length ? (
       "Loading"
     ) : (
       <>
@@ -33,7 +28,7 @@ class Home extends React.Component {
             <div className="row">
               <div className="col-10 mx-auto">
                 <div className="row mb-4">
-                  {this.state.photos.map((items) => {
+                  {photos.map((items) => {
                     console.log("ID:" + items.id);
                     return (
                       <Card
@@ -41,7 +36,7 @@ class Home extends React.Component {
                         imgsrc={items.imageUrl}
                         title={items.title}
                         price={items.price}
-                        setSelectedId={this.props.setSelectedId}
+                        setSelectedId={props.setSelectedId}
                       />
                     );
                   })}
@@ -53,5 +48,5 @@ class Home extends React.Component {
       </>
     );
   }
-}
+
 export default Home;

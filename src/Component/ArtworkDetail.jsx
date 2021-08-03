@@ -1,33 +1,27 @@
-import React from "react";
+import React,{useState,useEffect} from "react";
 import Data, { getData, getFilterData } from "../data";
 import Product from "./Product";
 
-export default class ArtWorkDetail extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      photos: [],
-    };
-  }
-  componentDidMount() {
-    const ID = this.props.selectedId;
-    //    getFilterData(ID);
-
+const ArtWorkDetail =(props)=> {
+  const [photos,setPhotos]=useState([]);
+  
+  useEffect(()=>{
+    const ID=props.selectedId;
     getFilterData(ID).then((result) => {
-      this.setState({ photos: result });
+      setPhotos(result );
     });
-  }
-  componentWillUnmount() {
-    this.setState({ photos: [] });
-  }
-  render() {
+    return()=>{
+setPhotos([]);
+    }
+  },[])
+ 
+  
     // console.log(this.state.photos);
-    return !this.state.photos.length ? (
+    return !photos.length ? (
       "Loading"
     ) : (
       <div className="container py-3">
-        {this.state.photos.map((items) => {
+        {photos.map((items) => {
           console.log("ID:" + items.id);
           return (
             <Product
@@ -36,12 +30,13 @@ export default class ArtWorkDetail extends React.Component {
               title={items.title}
               genre={items.genre}
               price={items.price}
-              addProductToCart={this.props.addProductToCart}
-              removeProductFromCart={this.props.removeProductFromCart}
+              addProductToCart={props.addProductToCart}
+              removeProductFromCart={props.removeProductFromCart}
             />
           );
         })}
       </div>
     );
   }
-}
+
+export default ArtWorkDetail
