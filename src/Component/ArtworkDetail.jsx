@@ -1,42 +1,28 @@
-import React,{useState,useEffect} from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Data, { getData, getFilterData } from "../data";
 import Product from "./Product";
+import { isEmptyObject } from "../utils";
+import { GlobalContext } from "../App";
 
-const ArtWorkDetail =(props)=> {
-  const [photos,setPhotos]=useState([]);
-  
-  useEffect(()=>{
-    const ID=props.selectedId;
-    getFilterData(ID).then((result) => {
-      setPhotos(result );
-    });
-    return()=>{
-setPhotos([]);
-    }
-  },[])
- 
-  
-    // console.log(this.state.photos);
-    return !photos.length ? (
-      "Loading"
-    ) : (
-      <div className="container py-3">
-        {photos.map((items) => {
-          console.log("ID:" + items.id);
-          return (
-            <Product
-              id={items.id}
-              imgsrc={items.imageUrl}
-              title={items.title}
-              genre={items.genre}
-              price={items.price}
-              addProductToCart={props.addProductToCart}
-              removeProductFromCart={props.removeProductFromCart}
-            />
-          );
-        })}
-      </div>
-    );
-  }
+const ArtWorkDetail = () => {
+  const { post, addProductToCart, removeProductFromCart } =
+    useContext(GlobalContext);
 
-export default ArtWorkDetail
+  return isEmptyObject(post) ? (
+    "Loading"
+  ) : (
+    <div className="container py-3">
+      <Product
+        id={post._id}
+        imgsrc={post.imageUrl}
+        title={post.title}
+        genre={post.genre}
+        price={post.price}
+        addProductToCart={addProductToCart}
+        removeProductFromCart={removeProductFromCart}
+      />
+    </div>
+  );
+};
+
+export default ArtWorkDetail;

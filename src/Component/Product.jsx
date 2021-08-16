@@ -10,16 +10,12 @@ const Product = (props) => {
     <div>
       <div className="row">
         <div className="col-10 mx-auto col-md-6 my-5">
-          <img
-            src={props.imgsrc}
-            className="img-fluid w-70 h-50"
-            alt="product"
-          />
+          <img src={props.imgsrc} className="img-fluid" alt="product" />
         </div>
 
         <div className="col-10 mx-auto col-md-6 my-3 text-capitalize text-blue">
           <h2>{props.title}</h2>
-          <h4> Genre:{props.genre}</h4>
+          <h5> Genre:{props.genre}</h5>
           <h5 className="text-blue">
             <strong>
               price: <span style={cssStyle}> ${props.price}</span>
@@ -28,17 +24,16 @@ const Product = (props) => {
           <p className="text-capitalize font-weight-bold mt-3 mb-0">
             Some info about product:
           </p>
-          <p className="text-muted lead">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ratione
-            officia dolor architecto dicta quidem facilis perspiciatis ex quas
-            libero, quia magnam rem culpa tempora consequatur, temporibus iusto
-            consequuntur neque. Impedit accusantium eveniet beatae dolorum
-            aperiam quae, explicabo, sunt harum asperiores aut nulla eos at quis
-            porro officiis repudiandae officia deserunt!
+          <p className="text-muted lead ">
+            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Aliquid
+            quo architecto nostrum eligendi ex. Fugiat, animi. Expedita earum,
+            quisquam officia doloribus aliquid modi. Obcaecati hic saepe fuga
+            asperiores, repellendus expedita necessitatibus non tempore
+            inventore quaerat beatae quisquam aspernatur ab, et mollitia
+            aperiam, placeat sed quasi? Accusamus possimus architecto cupiditate
+            magnam?
           </p>
-          <div className="btn-options">
-            {/* <Link to="/cart"><button onClick={()=>this.AddBtnClick(this.props.id)} className="add-products">add to cart</button></Link> */}
-
+          <div className="btn-options mt-3">
             <Link to="/cart">
               <button
                 className="add-products"

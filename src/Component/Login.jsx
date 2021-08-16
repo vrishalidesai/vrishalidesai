@@ -1,4 +1,5 @@
-import React ,{useEffect,useRef} from "react";
+import React ,{useState,useEffect,useRef} from "react";
+import Axios from 'axios';
 import {
   Grid,
   Paper,
@@ -23,7 +24,7 @@ const paperStyle = {
 const avtarStyle = { backgroundColor: "#4ed290" };
 const cssStyle = { textDecoration: "none" };
 const initialValues = {
-  username: "",
+  name: "",
   password: "",
   remember: false,
 };
@@ -33,21 +34,51 @@ const validationSchema = Yup.object().shape({
 });
 const onSubmit = (values, props) => {
   console.log(values);
-  setTimeout(() => {
-    props.resetForm();
-    props.setClicking(false);
-  }, 2000);
+  // setTimeout(() => {
+  //   props.resetForm();
+  //   props.setSubmitting(false);
+  // }, 2000);
 
   console.log(props);
 };
-const Login = ({ handleChange }) => {
+const Login = () => {
+  const url = `https://artwork-gallery-app1.herokuapp.com/auth/login`;
+
+  const [data, setData] = useState({
+    email: "",
+    password: "",
+    
+  });
+
+  function submit(e,props) {
+    e.preventDefault();
+    
+    Axios.post(url, {
+     
+      email: data.email,
+      password: data.password,
+      
+    }).then((res) => {
+      console.log(res.data);
+    });
+   
+  }
+
+  function handle(e) {
+    const newdata = { ...data };
+    newdata[e.target.name] = e.target.value;
+    setData(newdata);
+    console.log(newdata);
+  }
+
+
   const inputRef= useRef(null);
   useEffect(()=>{
 inputRef.current.focus()
-  })
+  },[])
   return (
     <Grid>
-      <Paper evaluation={10} style={paperStyle}>
+      <Paper elevation={10} style={paperStyle}>
         <Grid align="center">
           <Avatar style={avtarStyle}>
             <LockOutlinedIcon />{" "}
@@ -55,7 +86,8 @@ inputRef.current.focus()
           <h2>Sign in</h2>
         </Grid>
         <Formik
-          initialValues={initialValues}
+         data={data}
+         initialValues={initialValues}
           onSubmit={onSubmit}
           validationSchema={validationSchema}
         >
@@ -66,16 +98,20 @@ inputRef.current.focus()
                 as={TextField}
                 inputRef={inputRef}
                 label="Username"
-                name="username"
+                name="email"
+                value={data.email}
+                onChange={(e) => handle(e)}
                 placeholder="Enter username"
                 fullWidth
                 required
-                helperText={<ErrorMessage name="username" />}
+                helperText={<ErrorMessage name="email" />}
               />
               <Field
                 as={TextField}
                 label="password"
                 name="password"
+                value={data.password}
+                onChange={(e) => handle(e)}
                 type="password"
                 placeholder="Enter password"
                 fullWidth
@@ -91,6 +127,7 @@ inputRef.current.focus()
               <br />
               <Button
                 type="submit"
+                onClick={(e)=>submit(e)}
                 color="primary"
                 variant="contained"
                 disabled={props.isSubmitting}

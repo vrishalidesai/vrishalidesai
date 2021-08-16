@@ -1,4 +1,5 @@
-import React,{useEffect,useRef} from "react";
+import React, { useState, useEffect, useRef } from "react";
+import Axios from 'axios'
 import {
   Grid,
   Paper,
@@ -14,48 +15,65 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
-const Register = () => {
 
-  const inputRef= useRef(null);
-  useEffect(()=>{
-inputRef.current.focus()
-  })
-  const paperStyle = { padding: 20, width: 300, margin: "20px auto" };
-  const headerStyle = { margin: 0 };
-  const avtarStyle = { backgroundColor: "#4ed290" };
-  const initialValues = {
+const Register = () => {
+  const url = `https://artwork-gallery-app1.herokuapp.com/auth/register`;
+
+  const [data, setData] = useState({
     name: "",
     email: "",
-    phoneNumber: "",
     password: "",
-    confirmPassword: "",
-    termsAndConditions: false,
-  };
+  });
+
+  function submit(e) {
+    e.preventDefault();
+    Axios.post(url, {
+      name: data.name,
+      email: data.email,
+      password: data.password,
+    }).then((res) => {
+      console.log(res.data);
+    });
+  }
+
+  function handle(e) {
+    const newdata = { ...data };
+    newdata[e.target.name] = e.target.value;
+    setData(newdata);
+    console.log(newdata);
+  }
+  const inputRef = useRef(null);
+  useEffect(() => {
+    inputRef.current.focus();
+  },[]);
+  const paperStyle = { padding: 20, width: 300, margin: "3rem auto" };
+  const headerStyle = { margin: 0 };
+  const avtarStyle = { backgroundColor: "#4ed290" };
+  // const initialValues = {
+  //   name: "",
+  //   email: "",
+  //   password: "",
+  //   confirmPassword: "",
+  //};
   const validationSchema = Yup.object().shape({
     name: Yup.string().min(3, " It's too short").required("Required"),
     email: Yup.string().email("Enter valid email").required("Required"),
-    phoneNumber: Yup.number()
-      .typeError("Enter valid Phone number")
-      .required("Required"),
+
     password: Yup.string()
       .min(8, "Password minimum length should be 8")
       .required("Required"),
-    confirmPassword: Yup.string()
-      .oneOf([Yup.ref("password")], "password not match")
-      .required("Required"),
-    termsAndConditions: Yup.string().oneOf(
-      ["true"],
-      "Accept terms & conditions"
-    ),
   });
+
   const onSubmit = (values, props) => {
+    
     console.log(values);
+   
     setTimeout(() => {
       props.resetForm();
       props.setSubmitting(false);
     }, 2000);
   };
-  return (
+  return  (
     <Grid>
       <Paper evaluation={10} style={paperStyle}>
         <Grid align="center">
@@ -65,7 +83,8 @@ inputRef.current.focus()
           <h2 style={headerStyle}>Register</h2>
         </Grid>
         <Formik
-          initialValues={initialValues}
+          
+          data={data}
           validationSchema={validationSchema}
           onSubmit={onSubmit}
         >
@@ -76,6 +95,8 @@ inputRef.current.focus()
                 inputRef={inputRef}
                 fullWidth
                 name="name"
+                value={data.name}
+                onChange={(e) => handle(e)}
                 label="Name"
                 placeholder="Enter your name"
                 helperText={<ErrorMessage name="name" />}
@@ -86,50 +107,30 @@ inputRef.current.focus()
                 as={TextField}
                 label="Email"
                 name="email"
+                value={data.email}
+                onChange={(e) => handle(e)}
                 placeholder="Enter email"
                 helperText={<ErrorMessage name="email" />}
                 fullWidth
                 required
               />
-              <Field
-                as={TextField}
-                label="Phone number"
-                name="phoneNumber"
-                placeholder="Enter mobile"
-                helperText={<ErrorMessage name="phoneNumber" />}
-                fullWidth
-                required
-              />
+
               <Field
                 as={TextField}
                 label="password"
                 type="password"
                 name="password"
+                value={data.password}
+                onChange={(e) => handle(e)}
                 placeholder="Enter password"
                 helperText={<ErrorMessage name="password" />}
                 fullWidth
                 required
-              />
-              <Field
-                as={TextField}
-                label=" Confirm password"
-                type="password"
-                name="confirmPassword"
-                placeholder="Enter confirm password"
-                helperText={<ErrorMessage name="confirmPassword" />}
-                fullWidth
-                required
-              />
-              <FormControlLabel
-                control={<Field as={Checkbox} name="termsAndConditions" />}
-                label="I accept the terms and conditions"
-              />
-              <FormHelperText>
-                {<ErrorMessage name="termsAndConditions" />}
-              </FormHelperText>
-              <br />
+              /><br/><br/>
+
               <Button
                 type="submit"
+                onClick={(e)=>submit(e)}
                 variant="contained"
                 disabled={props.isSubmitting}
                 color="primary"

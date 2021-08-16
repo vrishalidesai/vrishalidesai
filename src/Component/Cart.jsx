@@ -1,23 +1,13 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
+import { GlobalContext } from "../App";
 import "./CSS/Cart.css";
+import axios from 'axios';
 export default function Cart(props) {
   console.log(props);
-  const { productsInCart, addProductToCart, removeProductFromCart } = props;
-
-  const res = productsInCart.reduce(
-    (a, c) => ({ ...a, [c.productId]: (a[c.productId] || 0) + 1 }),
-    {}
-  );
-
-  let uniques = [];
-  for (const [key, value] of Object.entries(res)) {
-    let product = productsInCart.find((val) => val.productId === parseInt(key));
-    console.log(product);
-    uniques.push({ ...product, qty: res[key] });
-  }
-  const totalPrice = uniques.reduce((a, c) => a + c.productPrice * c.qty, 0);
-
+  const {  uniques, addProductToCart,productsInCart,removeProductFromCart } =
+    useContext(GlobalContext);
+   
   return (
     <div
       style={{
@@ -46,10 +36,13 @@ export default function Cart(props) {
             <div>
               <button
                 onClick={() => {
-                  props.addProductToCart({
+                
+                  addProductToCart({
                     productId: item.productId,
-                    productPrice: item.productPrice,
                     productTitle: item.productTitle,
+                    productPrice: item.productPrice,
+                    productQuantity:item.qty
+
                   });
                 }}
                 className="add"
@@ -57,7 +50,10 @@ export default function Cart(props) {
                 +
               </button>
               <button
-                onClick={() => removeProductFromCart(item.productId)}
+                onClick={
+                  () =>{
+                
+                    removeProductFromCart(item.productId)}}
                 className="remove"
               >
                 -
@@ -77,7 +73,7 @@ export default function Cart(props) {
             <div className="col-2">
               <strong>Total Price</strong>
             </div>
-            <div className="col-1 text-right">${totalPrice.toFixed(2)}</div>
+            <div className="col-1 text-right">${props.totalPrice.toFixed(2)}</div>
           </div>
           <hr />
           <div className="row">

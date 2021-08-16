@@ -37,9 +37,12 @@ a {
 .row.center {
   align-items: center;
 }
-
+.img{
+width:15px;
+}
 img.small {
   max-height: 8rem;
+
 }
 
 button.add {
@@ -54,7 +57,12 @@ button.badge {
   background-color: #f04040;
   border: none;
   color: #ffffff;
-  width: 2rem;
+  width: 1.4rem;
+  border-radius: 50%;
+  position: relative;
+  top: -12px;
+    right: 12px;
+    font-size: 11px;
 }
 .text-right {
   text-align: right;
