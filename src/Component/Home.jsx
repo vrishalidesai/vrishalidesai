@@ -1,26 +1,17 @@
+
+
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import Card from "./Card";
 import { GlobalContext } from "../App";
+
+
 
 const Home = () => {
   const { getProductDetails } = useContext(GlobalContext);
 
   
   const [posts, setPosts] = useState([]);
-
-  // useEffect(()=>{
-  //   const url=  `https://artwork-gallery-app1.herokuapp.com/artworks/get`;
-
-  //   fetch(url).then((resp)=>resp.json())
-
-  //   .then((response)=>{
-  //     console.log("Response in Home",response)
-  //     setPosts(response)
-  //   }
-  //   )
-
-  // },[])
 
   useEffect(() => {
     fetchProducts();
@@ -59,11 +50,14 @@ const Home = () => {
                       genre={post.genre}
                       getProductDetails={getProductDetails}
                     />
+                    
+                  
                   );
                 })}
               </div>
             </div>
           </div>
+         
         </div>
       </div>
     </>

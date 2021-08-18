@@ -46,7 +46,7 @@ const Register = () => {
   useEffect(() => {
     inputRef.current.focus();
   },[]);
-  const paperStyle = { padding: 20, width: 300, margin: "3rem auto" };
+  const paperStyle = { padding: 20, height:"60vh",width: 300, margin: "3rem auto" };
   const headerStyle = { margin: 0 };
   const avtarStyle = { backgroundColor: "#4ed290" };
   // const initialValues = {

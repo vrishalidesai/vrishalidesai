@@ -61,8 +61,8 @@ button.badge {
   border-radius: 50%;
   position: relative;
   top: -12px;
-    right: 12px;
-    font-size: 11px;
+ right: 12px;
+font-size: 11px;
 }
 .text-right {
   text-align: right;

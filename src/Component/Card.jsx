@@ -5,6 +5,7 @@ import { withRouter } from "react-router-dom";
 
 
 
+
 const Card = (props) => {
   console.log(props);
   return (
@@ -33,7 +34,9 @@ const Card = (props) => {
               
           </div>
         </div>
+       
       </div>
+      
     </>
   );
 };

@@ -31,6 +31,7 @@ export default function Cart(props) {
         console.log("items:", item);
         return (
           <div key={item.productId} className="row">
+            <img src={item.productImage}/>
             <div style={{ paddingLeft: "20px" }}>{item.productTitle}</div>
             <div className="product">{item.productPrice}</div>
             <div>
@@ -39,6 +40,7 @@ export default function Cart(props) {
                 
                   addProductToCart({
                     productId: item.productId,
+                    productImage:item.productImage,
                     productTitle: item.productTitle,
                     productPrice: item.productPrice,
                     productQuantity:item.qty

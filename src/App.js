@@ -14,10 +14,9 @@ import axios from "axios";
 export const GlobalContext = React.createContext();
 
 const App = () => {
-  
+
   const [productsInCart, setProductsInCart] = useState([]);
   const [post, setPost] = useState({});
-
   const res = productsInCart.reduce(
     (a, c) => ({ ...a, [c.productId]: (a[c.productId] || 0) + 1 }),
     {}
@@ -25,18 +24,16 @@ const App = () => {
 
   let uniques = [];
   for (const [key, value] of Object.entries(res)) {
-   
     let product = productsInCart.find((val) => val.productId === key);
     console.log(product);
     uniques.push({ ...product, qty: res[key] });
   }
   const totalPrice = uniques.reduce((a, c) => a + c.productPrice * c.qty, 0);
-  
+
   const getProductDetails = (id) => {
     axios
       .get(`https://artwork-gallery-app1.herokuapp.com/artworks/get/${id}`)
       .then((res) => {
-       
         setPost(res.data);
         console.log("ResponseData", res.data);
       })
@@ -44,12 +41,11 @@ const App = () => {
   };
 
   const addProductToCart = (product) => {
-    
     console.log("products", product);
     axios
       .post(
         `https://artwork-gallery-app1.herokuapp.com/orders/${product.productId}`,
-        { artwork:[...uniques]}
+        { artwork: [...uniques] }
       )
       .then((res) => {
         console.log(res.data);
@@ -60,17 +56,14 @@ const App = () => {
   };
 
   const removeProductFromCart = (id) => {
-    
-    let productsInCartCopy =[...productsInCart] ;
+    let productsInCartCopy = [...productsInCart];
     const idx = productsInCartCopy.findIndex(
       ({ productId }) => productId === id
     );
     if (idx >= 0) {
       productsInCartCopy.splice(idx, 1);
-      
     }
-     setProductsInCart(productsInCartCopy);
-   
+    setProductsInCart(productsInCartCopy);
   };
 
   return (
@@ -82,7 +75,7 @@ const App = () => {
           <GlobalContext.Provider
             value={{
               getProductDetails,
-           addProductToCart,
+              addProductToCart,
               removeProductFromCart,
               post,
               productsInCart,
@@ -93,18 +86,17 @@ const App = () => {
               <Home />
             </Route>
             <Route path="/artworkDetail">
-              <  ArtworkDetail />
-        </Route>
+              <ArtworkDetail />
+            </Route>
             <Route path="/cart">
               <Cart totalPrice={totalPrice} />
             </Route>
             <Route path="/login" component={Login} />
-          <Route path="/register" component={Register} />
+            <Route path="/register" component={Register} />
           </GlobalContext.Provider>
           <Route path="/checkout" component={Checkout} />
 
           <Redirect to="/" />
-         
         </Switch>
       </BrowserRouter>
     </>
