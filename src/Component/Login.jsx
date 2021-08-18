@@ -1,4 +1,5 @@
-import React ,{useState,useEffect,useRef} from "react";
+import React ,{useState,useEffect,useRef,useContext} from "react";
+import { GlobalContext } from "../App";
 import Axios from 'axios';
 import {
   Grid,
@@ -44,6 +45,9 @@ const onSubmit = (values, props) => {
 const Login = () => {
   const url = `https://artwork-gallery-app1.herokuapp.com/auth/login`;
 
+// const[userId,setUserId]=useState(null);
+const { setUserId } =useContext(GlobalContext);
+   
   const [data, setData] = useState({
     email: "",
     password: "",
@@ -59,7 +63,9 @@ const Login = () => {
       password: data.password,
       
     }).then((res) => {
-      console.log(res.data);
+      console.log("LoOGIN",res.data);
+      setUserId(res.data._id);
+      
     });
    
   }

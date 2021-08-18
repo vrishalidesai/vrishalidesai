@@ -1,0 +1,19 @@
+import React,{useContext} from 'react';
+import { Route, Redirect } from 'react-router-dom';
+import { GlobalContext } from '../App';
+
+
+
+const PrivateRoute = ({component: Component, ...rest}) => {
+    const{userId}=useContext(GlobalContext);
+    return (
+
+        <Route {...rest} render={props => (
+            userId==null ?
+            <Redirect to="/login" /> 
+            : <Component {...props} />
+        )} />
+    );
+};
+
+export default PrivateRoute;

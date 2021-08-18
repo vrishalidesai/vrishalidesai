@@ -13,6 +13,19 @@ const Home = () => {
   
   const [posts, setPosts] = useState([]);
 
+  // useEffect(()=>{
+  //   const url=  `https://artwork-gallery-app1.herokuapp.com/artworks/get`;
+
+  //   fetch(url).then((resp)=>resp.json())
+
+  //   .then((response)=>{
+  //     console.log("Response in Home",response)
+  //     setPosts(response)
+  //   }
+  //   )
+
+  // },[])
+
   useEffect(() => {
     fetchProducts();
   }, []);

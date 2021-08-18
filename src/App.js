@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,useContext } from "react";
+import PrivateRoute from "./Component/PrivateRoute";
 import Home from "./Component/Home";
 import Cart from "./Component/Cart";
 import Login from "./Component/Login";
@@ -15,7 +16,10 @@ export const GlobalContext = React.createContext();
 
 const App = () => {
 
+
   const [productsInCart, setProductsInCart] = useState([]);
+  const[userId,setUserId]=useState(null);
+  
   const [post, setPost] = useState({});
   const res = productsInCart.reduce(
     (a, c) => ({ ...a, [c.productId]: (a[c.productId] || 0) + 1 }),
@@ -41,10 +45,11 @@ const App = () => {
   };
 
   const addProductToCart = (product) => {
+  
     console.log("products", product);
     axios
       .post(
-        `https://artwork-gallery-app1.herokuapp.com/orders/${product.productId}`,
+        `https://artwork-gallery-app1.herokuapp.com/orders/${userId}`,
         { artwork: [...uniques] }
       )
       .then((res) => {
@@ -78,6 +83,8 @@ const App = () => {
               addProductToCart,
               removeProductFromCart,
               post,
+              userId,
+              setUserId,
               productsInCart,
               uniques,
             }}
@@ -85,9 +92,7 @@ const App = () => {
             <Route exact path="/">
               <Home />
             </Route>
-            <Route path="/artworkDetail">
-              <ArtworkDetail />
-            </Route>
+            <PrivateRoute  component={ArtworkDetail} path="/artworkDetail" exact />
             <Route path="/cart">
               <Cart totalPrice={totalPrice} />
             </Route>
