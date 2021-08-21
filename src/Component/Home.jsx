@@ -1,10 +1,8 @@
-
-
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import Card from "./Card";
 import { GlobalContext } from "../App";
-
+import Pagination from "./Pagination";
 
 
 const Home = () => {
@@ -12,7 +10,15 @@ const Home = () => {
 
   
   const [posts, setPosts] = useState([]);
-
+  const[showPerPage,setShowPerPage]=useState(4);
+  const [pagination,setPagination]=useState({
+    start:0,
+    end:showPerPage,
+  })
+const onPaginationChange =(start,end)=>{
+  console.log(start,end);
+  setPagination({start:start,end:end})
+}
   // useEffect(()=>{
   //   const url=  `https://artwork-gallery-app1.herokuapp.com/artworks/get`;
 
@@ -51,7 +57,7 @@ const Home = () => {
           <div className="row">
             <div className="col-10 mx-auto">
               <div className="row mb-4">
-                {posts.map((post) => {
+                {posts.slice(pagination.start,pagination.end).map((post) => {
                   console.log("ID:", post._id);
                   return (
                     <Card
@@ -70,7 +76,7 @@ const Home = () => {
               </div>
             </div>
           </div>
-         
+          <Pagination showPerPage={showPerPage} onPaginationChange={onPaginationChange} total={posts.length}/>
         </div>
       </div>
     </>
