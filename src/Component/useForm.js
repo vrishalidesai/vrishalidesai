@@ -8,11 +8,7 @@ function useForm() {
         password:"",
       });
       const handleChange=(e)=>{
-        // setValues({
-        //   ...values,
-        //   [event.target.name]: event.target.value,
-        // });
-    
+       
         const newdata = { ...values };
         newdata[e.target.name] = e.target.value;
         setValues(newdata);
