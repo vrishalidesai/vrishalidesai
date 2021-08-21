@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useState} from "react";
 import { Link } from "react-router-dom";
 
 const cssStyle = {
@@ -6,6 +6,7 @@ const cssStyle = {
 };
 
 const Product = (props) => {
+  const [quantity,setQuantity]=useState(0)
   return (
     <div>
       <div className="row">
@@ -42,6 +43,7 @@ const Product = (props) => {
                     productId: props.id,
                     productPrice: props.price,
                     productTitle: props.title,
+                   
                   });
                 }}
               >

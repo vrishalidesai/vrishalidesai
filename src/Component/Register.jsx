@@ -1,147 +1,76 @@
-import React, { useState, useEffect, useRef } from "react";
-import Axios from 'axios'
-import {
-  Grid,
-  Paper,
-  Avatar,
-  TextField,
-  Button,
-  Typography,
-  Link,
-  FormHelperText,
-} from "@material-ui/core";
-import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
-import { Formik, Field, Form, ErrorMessage } from "formik";
-import * as Yup from "yup";
+import React ,{useState}from 'react';
+import './CSS/Register.css';
+import Axios from 'axios';
+import validation from './validation';
+const Register=()=>{
+  const [values,setValues]=useState({
+    name:"",
+    email:"",
+    password:"",
+  })
+const [errors,setErrors]=useState({});
+const url = `https://artwork-gallery-app1.herokuapp.com/auth/register`;
+   const handleChange=(e)=>{
+    // setValues({
+    //   ...values,
+    //   [event.target.name]: event.target.value,
+    // });
 
-const Register = () => {
-  const url = `https://artwork-gallery-app1.herokuapp.com/auth/register`;
+    const newdata = { ...values };
+    newdata[e.target.name] = e.target.value;
+    setValues(newdata);
+    console.log(newdata);
+  }
 
-  const [data, setData] = useState({
-    name: "",
-    email: "",
-    password: "",
-  });
-
-  function submit(e) {
+  
+  const handleFormSubmit=(e)=>{
     e.preventDefault();
+ 
+    setErrors(validation(values));
+   
     Axios.post(url, {
-      name: data.name,
-      email: data.email,
-      password: data.password,
+      name: values.name,
+      email: values.email,
+      password: values.password,
     }).then((res) => {
       console.log(res.data);
     });
-  }
-
-  function handle(e) {
-    const newdata = { ...data };
-    newdata[e.target.name] = e.target.value;
-    setData(newdata);
-    console.log(newdata);
-  }
-  const inputRef = useRef(null);
-  useEffect(() => {
-    inputRef.current.focus();
-  },[]);
-  const paperStyle = { padding: 20, height:"60vh",width: 300, margin: "3rem auto" };
-  const headerStyle = { margin: 0 };
-  const avtarStyle = { backgroundColor: "#4ed290" };
-  // const initialValues = {
-  //   name: "",
-  //   email: "",
-  //   password: "",
-  //   confirmPassword: "",
-  //};
-  const validationSchema = Yup.object().shape({
-    name: Yup.string().min(3, " It's too short").required("Required"),
-    email: Yup.string().email("Enter valid email").required("Required"),
-
-    password: Yup.string()
-      .min(8, "Password minimum length should be 8")
-      .required("Required"),
-  });
-
-  const onSubmit = (values, props) => {
     
-    console.log(values);
    
-    setTimeout(() => {
-      props.resetForm();
-      props.setSubmitting(false);
-    }, 2000);
-  };
-  return  (
-    <Grid>
-      <Paper evaluation={10} style={paperStyle}>
-        <Grid align="center">
-          <Avatar style={avtarStyle}>
-            <AddCircleOutlineIcon />{" "}
-          </Avatar>
-          <h2 style={headerStyle}>Register</h2>
-        </Grid>
-        <Formik
-          
-          data={data}
-          validationSchema={validationSchema}
-          onSubmit={onSubmit}
-        >
-          {(props) => (
-            <Form>
-              <Field
-                as={TextField}
-                inputRef={inputRef}
-                fullWidth
-                name="name"
-                value={data.name}
-                onChange={(e) => handle(e)}
-                label="Name"
-                placeholder="Enter your name"
-                helperText={<ErrorMessage name="name" />}
-                fullWidth
-                required
-              />
-              <Field
-                as={TextField}
-                label="Email"
-                name="email"
-                value={data.email}
-                onChange={(e) => handle(e)}
-                placeholder="Enter email"
-                helperText={<ErrorMessage name="email" />}
-                fullWidth
-                required
-              />
+  }
+  
+  return(
 
-              <Field
-                as={TextField}
-                label="password"
-                type="password"
-                name="password"
-                value={data.password}
-                onChange={(e) => handle(e)}
-                placeholder="Enter password"
-                helperText={<ErrorMessage name="password" />}
-                fullWidth
-                required
-              /><br/><br/>
+    <div className="center register">
+    <h1>Register</h1>
+    <form  values={values} onSubmit={handleFormSubmit} >
+      <div className="txt_field">
+        <input type="text" name="name" value={values.name} onChange={handleChange}  />
+        <span></span>
+        {errors.name &&  <div className="errorMsg">{errors.name}</div>}
+     
+        <label>Username</label>
+      </div>
+      <div className="txt_field">
+        <input type="text" name="email" value={values.email} onChange={handleChange}  />
+      {errors.email && <div className="errorMsg">{errors.email}</div>}
+        <span></span>
+        <label>Email</label>
+      </div>
+      <div className="txt_field">
+        <input  type="password" name="password" value={values.password} onChange={handleChange} />
+      { errors.password && <div className="errorMsg">{errors.password}</div>}
+        <span></span>
+        <label>Password</label>
+      </div>
+      {/* <div className="pass">Forgot Password?</div> */}
+      <input type="submit"  value="Register" />
+      <div className="signup_link">
+        Already a member? <a href="/login">Login</a>
+      </div>
+    </form>
+  </div>
 
-              <Button
-                type="submit"
-                onClick={(e)=>submit(e)}
-                variant="contained"
-                disabled={props.isSubmitting}
-                color="primary"
-              >
-                {props.isSubmitting ? "Loading" : "Register"}
-              </Button>
-            </Form>
-          )}
-        </Formik>
-      </Paper>
-    </Grid>
-  );
-};
+    );
+}
 export default Register;

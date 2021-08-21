@@ -19,14 +19,16 @@ const App = () => {
 
   const [productsInCart, setProductsInCart] = useState([]);
   const[userId,setUserId]=useState(null);
-  
   const [post, setPost] = useState({});
+  
+  
+  
   const res = productsInCart.reduce(
     (a, c) => ({ ...a, [c.productId]: (a[c.productId] || 0) + 1 }),
     {}
   );
 
-  let uniques = [];
+  let uniques =[];
   for (const [key, value] of Object.entries(res)) {
     let product = productsInCart.find((val) => val.productId === key);
     console.log(product);
@@ -45,20 +47,24 @@ const App = () => {
   };
 
   const addProductToCart = (product) => {
-  
+
     console.log("products", product);
+    
     axios
       .post(
         `https://artwork-gallery-app1.herokuapp.com/orders/${userId}`,
-        { artwork: [...uniques] }
+        { artworks: uniques }
       )
       .then((res) => {
-        console.log(res.data);
+        console.log("ADDPRODUCTS",res.data);
+        setProductsInCart([...productsInCart,product]);
+       
+       
       });
-    setProductsInCart([...productsInCart, product]);
+    
 
     console.log("Products In Cart :", productsInCart);
-  };
+  }
 
   const removeProductFromCart = (id) => {
     let productsInCartCopy = [...productsInCart];

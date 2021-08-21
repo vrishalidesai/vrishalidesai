@@ -37,7 +37,6 @@ export default function Cart(props) {
             <div>
               <button
                 onClick={() => {
-                
                   addProductToCart({
                     productId: item.productId,
                     productImage:item.productImage,

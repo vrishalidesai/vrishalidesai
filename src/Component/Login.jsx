@@ -1,157 +1,74 @@
-import React ,{useState,useEffect,useRef,useContext} from "react";
-import { GlobalContext } from "../App";
+import React ,{useState,useEffect,useContext,useRef}from 'react';
+import './CSS/Register.css';
 import Axios from 'axios';
-import {
-  Grid,
-  Paper,
-  Avatar,
-  TextField,
-  Button,
-  Typography,
-  Link,
-} from "@material-ui/core";
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
-import { NavLink } from "react-router-dom";
-import { Formik, Form, Field, ErrorMessage } from "formik";
-import * as Yup from "yup";
-const paperStyle = {
-  padding: "20px",
-  height: "73vh",
-  width: 300,
-  margin: "30px auto",
-};
-const avtarStyle = { backgroundColor: "#4ed290" };
-const cssStyle = { textDecoration: "none" };
-const initialValues = {
-  name: "",
-  password: "",
-  remember: false,
-};
-const validationSchema = Yup.object().shape({
-  username: Yup.string().email("Please enter valid email").required("Required"),
-  password: Yup.string().required("Required"),
-});
-const onSubmit = (values, props) => {
-  console.log(values);
-  // setTimeout(() => {
-  //   props.resetForm();
-  //   props.setSubmitting(false);
-  // }, 2000);
+import validation from './validation';
+import {GlobalContext} from '../App';
+const Login=()=>{
 
-  console.log(props);
-};
-const Login = () => {
-  const url = `https://artwork-gallery-app1.herokuapp.com/auth/login`;
-
-// const[userId,setUserId]=useState(null);
+  const [values,setValues]=useState({
+    name:"",
+    email:"",
+    password:"",
+  })
+const [errors,setErrors]=useState({});
+const url = `https://artwork-gallery-app1.herokuapp.com/auth/login`;
 const { setUserId } =useContext(GlobalContext);
-   
-  const [data, setData] = useState({
-    email: "",
-    password: "",
-    
-  });
+const inputRef= useRef(null);
+useEffect(()=>{
+inputRef.current.focus()
+},[])
+  const handleChange=(e)=>{
 
-  function submit(e,props) {
-    e.preventDefault();
-    
-    Axios.post(url, {
-     
-      email: data.email,
-      password: data.password,
-      
-    }).then((res) => {
-      console.log("LoOGIN",res.data);
-      setUserId(res.data._id);
-      
-    });
-   
-  }
-
-  function handle(e) {
-    const newdata = { ...data };
+    const newdata = { ...values };
     newdata[e.target.name] = e.target.value;
-    setData(newdata);
+    setValues(newdata);
     console.log(newdata);
   }
 
+  
+  const handleFormSubmit=(e)=>{
+    e.preventDefault();
+ 
+    setErrors(validation(values));
+   
+    Axios.post(url, {
+      name: values.name,
+      email: values.email,
+      password: values.password,
+    }).then((res) => {
+      console.log(res.data);
+      setUserId(res.data._id);
+    });
 
-  const inputRef= useRef(null);
-  useEffect(()=>{
-inputRef.current.focus()
-  },[])
-  return (
-    <Grid>
-      <Paper elevation={10} style={paperStyle}>
-        <Grid align="center">
-          <Avatar style={avtarStyle}>
-            <LockOutlinedIcon />{" "}
-          </Avatar>
-          <h2>Sign in</h2>
-        </Grid>
-        <Formik
-         data={data}
-         initialValues={initialValues}
-          onSubmit={onSubmit}
-          validationSchema={validationSchema}
-        >
-          {(props) => (
-            <Form>
-              {console.log(props)}
-              <Field
-                as={TextField}
-                inputRef={inputRef}
-                label="Username"
-                name="email"
-                value={data.email}
-                onChange={(e) => handle(e)}
-                placeholder="Enter username"
-                fullWidth
-                required
-                helperText={<ErrorMessage name="email" />}
-              />
-              <Field
-                as={TextField}
-                label="password"
-                name="password"
-                value={data.password}
-                onChange={(e) => handle(e)}
-                type="password"
-                placeholder="Enter password"
-                fullWidth
-                required
-                helperText={<ErrorMessage name="password" />}
-              />
-              <Field
-                as={FormControlLabel}
-                name="remember"
-                control={<Checkbox color="primary" />}
-                label="Remember me"
-              />
-              <br />
-              <Button
-                type="submit"
-                onClick={(e)=>submit(e)}
-                color="primary"
-                variant="contained"
-                disabled={props.isSubmitting}
-                fullWidth
-              >
-                {props.isSubmitting ? "Loading" : "Sign in"}
-              </Button>
-              <br />
-              <br />
-            </Form>
-          )}
-        </Formik>
+    
+   
+   }
+  
+  return(
 
-        <Typography>
-          Do you have an account ?<NavLink to="/register">Register</NavLink>
-        </Typography>
-      </Paper>
-    </Grid>
-  );
-};
+    <div className="center">
+    <h1>Login</h1>
+    <form  values={values} onSubmit={handleFormSubmit} >
+      <div className="txt_field">
+        <input type="text" name="email" value={values.email} onChange={handleChange} ref={inputRef} />
+      {errors.email && <div className="errorMsg">{errors.email}</div>}
+        <span></span>
+        <label>Email</label>
+      </div>
+      <div className="txt_field">
+        <input  type="password" name="password" value={values.password} onChange={handleChange} />
+      { errors.password && <div className="errorMsg">{errors.password}</div>}
+        <span></span>
+        <label>Password</label>
+      </div>
+      {/* <div className="pass">Forgot Password?</div> */}
+      <input type="submit"  value="Login" />
+      <div className="signup_link">
+        Not a a member? <a href="/register">Register</a>
+      </div>
+    </form>
+  </div>
+
+    );
+}
 export default Login;
