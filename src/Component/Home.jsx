@@ -19,18 +19,7 @@ const onPaginationChange =(start,end)=>{
   console.log(start,end);
   setPagination({start:start,end:end})
 }
-  // useEffect(()=>{
-  //   const url=  `https://artwork-gallery-app1.herokuapp.com/artworks/get`;
-
-  //   fetch(url).then((resp)=>resp.json())
-
-  //   .then((response)=>{
-  //     console.log("Response in Home",response)
-  //     setPosts(response)
-  //   }
-  //   )
-
-  // },[])
+ 
 
   useEffect(() => {
     fetchProducts();
@@ -52,7 +41,6 @@ const onPaginationChange =(start,end)=>{
   ) : (
     <>
       <div className="my-5">
-        {/* <h1 className="text-center">Artwork Gallery</h1> */}
         <div className="container-fluid mb-5">
           <div className="row">
             <div className="col-10 mx-auto">

@@ -13,11 +13,9 @@ const Login = () => {
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
-
     setErrors(validation(values));
 
     Axios.post(url, {
-      name: values.name,
       email: values.email,
       password: values.password,
     })
@@ -25,7 +23,7 @@ const Login = () => {
         console.log(res.data);
         setUserId(res.data._id);
         setTimeout(() => {
-          setValues({ name: "", email: "", password: "" });
+          setValues({  email: "", password: "" });
         }, 1000);
       })
       .catch((err) => {
@@ -44,6 +42,7 @@ const Login = () => {
             value={values.email}
             onChange={handleChange}
             ref={inputRef}
+            required
           />
           {errors.email && <div className="errorMsg">{errors.email}</div>}
           <span></span>
@@ -55,6 +54,7 @@ const Login = () => {
             name="password"
             value={values.password}
             onChange={handleChange}
+            required
           />
           {errors.password && <div className="errorMsg">{errors.password}</div>}
           <span></span>

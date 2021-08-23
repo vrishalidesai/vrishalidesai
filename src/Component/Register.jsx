@@ -9,7 +9,6 @@ const Register = () => {
   const url = `https://artwork-gallery-app1.herokuapp.com/auth/register`;
   const handleFormSubmit = (e) => {
     e.preventDefault();
-
     setErrors(validation(values));
 
     Axios.post(url, {
@@ -40,6 +39,7 @@ const Register = () => {
             value={values.name}
             onChange={handleChange}
             ref={inputRef}
+            required
           />
           <span></span>
           {errors.name && <div className="errorMsg">{errors.name}</div>}
@@ -52,6 +52,7 @@ const Register = () => {
             name="email"
             value={values.email}
             onChange={handleChange}
+            required
           />
           {errors.email && <div className="errorMsg">{errors.email}</div>}
           <span></span>
@@ -63,6 +64,7 @@ const Register = () => {
             name="password"
             value={values.password}
             onChange={handleChange}
+            required
           />
           {errors.password && <div className="errorMsg">{errors.password}</div>}
           <span></span>
